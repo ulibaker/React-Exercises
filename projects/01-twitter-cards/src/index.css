@@ -1,0 +1,21 @@
+body {
+    margin: 0;
+    background: #111;
+    font-family: system-ui;
+    display: grid;
+    place-content: center;
+    min-height: 100vh;
+}
+
+.aside-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+section {
+    background: #222;
+    padding: 25px;
+    border: 1px solid #FFF;
+    border-radius: 40px;
+}
