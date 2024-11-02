@@ -1,55 +1,27 @@
 import { useState } from 'react'
+import confetti from "canvas-confetti"
 import './App.css'
-
-const turns = {
-  X: 'x',
-  O: 'o'
-}
-const winnerCombos = [
-  [0, 1, 2],
-  [3, 4, 5],
-  [6, 7, 8],
-  [0, 3, 6],
-  [1, 4, 7],
-  [2, 5, 8],
-  [0, 4, 8],
-  [2, 4, 6]
-]
-
-const Square = ({ children, isSelected, updateBoard, index }) => {
-  const classNameS = `square ${isSelected ? 'is-selected' : '' }`
-const handleClick = () => {
-  updateBoard(index)
-}
-
-  return (
-    <div onClick = {handleClick} className = {classNameS}>
-      {children}
-    </div>
-  )
-}
+import { Square } from '../components/Square'
+import { turns, winnerCombos } from './consts'
+import { checkWinner } from '../logic/board'
+import { Winner } from '../components/Winner'
+import { saveGame, resetGameStorage } from '../logic/storage/index.js'
 
 function App() {
-  const [board, setBoard] = useState(Array(9).fill(null))
-  const [turn, setTurn] = useState(turns.X)
+  const [board, setBoard] = useState(() => {
+    const getBoardFromStorage = window.localStorage.getItem('board')
+    return getBoardFromStorage ? JSON.parse(getBoardFromStorage) :
+    Array(9).fill(null)
+  })
+
+  const [turn, setTurn] = useState(() => {
+    const getTurnFromStorage = window.localStorage.getItem('turn')
+    return getTurnFromStorage ?? turns.X
+  })
   const [winner, setWinner] = useState(null)
   //null = initial
   //turn.X || turn.O = game over
   //false = tie
-
-  const checkWinner = (boardToCheck) => {
-    for(const combo of winnerCombos) {
-      const [a, b, c] = combo
-      if(
-        boardToCheck[a] &&
-        boardToCheck[a] === boardToCheck[b] &&
-        boardToCheck[a] === boardToCheck[c]
-      ) {
-        return boardToCheck[a]
-      }
-    }
-    return null
-  }
 
   const updateBoard = (index) => {
 
@@ -60,9 +32,15 @@ function App() {
 
     const newTurn = turn === turns.X ? turns.O : turns.X
     setTurn(newTurn)
+    //SAVE
+    saveGame({
+      board: newBoard,
+      turn: newTurn
+    })
 
     const newWinner = checkWinner(newBoard)
     if(newWinner) {
+      confetti()
       setWinner(newWinner)
     } 
     else if(checkEnd(newBoard)) {
@@ -78,6 +56,8 @@ function App() {
     setBoard(Array(9).fill(null))
     setTurn(turns.X)
     setWinner(null)
+    //DELETE SAVE FILES LOCAL STORAGE
+    resetGameStorage()
   }
 
   return (
@@ -103,30 +83,7 @@ function App() {
         <Square isSelected = {turn === turns.X}>{turns.X}</Square>
         <Square isSelected = {turn === turns.O}>{turns.O}</Square>
       </section>
-
-      <section>
-        {
-          winner !== null && (
-            <section className='winner'>
-              <div className='text'>
-                <h2>
-                  {
-                    winner === false
-                    ? 'Tie.'
-                    : 'The winner is:'
-                  }
-                </h2>
-                <header className='win'>
-                  {winner && <Square>{winner}</Square>}
-                </header>
-                <footer>
-                  <button onClick={resetGame}>Reset</button>
-                </footer>
-              </div>
-            </section>
-          )
-        }
-      </section>
+      <Winner resetGame={resetGame} winner={winner}/>
     </main>
   )
 }
