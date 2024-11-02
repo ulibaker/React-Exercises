@@ -1,7 +1,7 @@
 export const turns = {
     X: 'x',
     O: 'o'
-  }
+}
 
 export const winnerCombos = [
     [0, 1, 2],
@@ -12,4 +12,4 @@ export const winnerCombos = [
     [2, 5, 8],
     [0, 4, 8],
     [2, 4, 6]
-  ]
+]
