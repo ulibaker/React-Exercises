@@ -1,0 +1,15 @@
+.cats-app-main-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: system-ui;
+}
+.cats-app-main-column img {
+    width: 800px;
+    height: 800px;
+    padding: 1px;
+    border: 1px solid black;
+}
