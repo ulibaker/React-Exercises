@@ -4,16 +4,12 @@ import { useMovies } from '../hooks/useMovies'
 import { useSearch } from '../hooks/useSearch'
 
 function App() {
-  const { movies } = useMovies()
   const { query, setQuery, error } = useSearch()
+  const { movies, getMovies } = useMovies({ query })
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    if (error==null) {
-      const fields = new window.FormData(event.target)
-      const query = fields.get('query')
-      console.log(query)
-    }
+    getMovies()
   }
 
   const handleChange = (event) => {
@@ -28,9 +24,9 @@ function App() {
       <header>
         <form className='form' onSubmit={handleSubmit}>
           <label>
-            Put the movie name:
+            <p>Put the movie name:</p>
             <br/>
-            <input 
+            <input
               style={{ 
                 border: '1px solid transparent', 
                 borderColor: error ? 'red' : 'transparent' 
