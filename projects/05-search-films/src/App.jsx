@@ -2,14 +2,20 @@ import './App.css'
 import { MoviesYN } from '../components/Movies'
 import { useMovies } from '../hooks/useMovies'
 import { useSearch } from '../hooks/useSearch'
+import { useState } from 'react'
 
 function App() {
+  const [ sort, setSort ] = useState(false)
   const { query, setQuery, error } = useSearch()
-  const { movies, getMovies } = useMovies({ query })
+  const { movies, loading, getMovies } = useMovies({ query, sort })
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    getMovies()
+    getMovies({ query })
+  }
+
+  const handleSort = () => {
+    setSort(!sort)
   }
 
   const handleChange = (event) => {
@@ -24,9 +30,9 @@ function App() {
       <header>
         <form className='form' onSubmit={handleSubmit}>
           <label>
-            <p>Put the movie name:</p>
+            <p className='moviename'>Put the movie name:</p>
             <br/>
-            <input
+            <input className='textfield'
               style={{ 
                 border: '1px solid transparent', 
                 borderColor: error ? 'red' : 'transparent' 
@@ -35,6 +41,7 @@ function App() {
               value={query} 
               name='query' 
               placeholder='The Lord Of The Rings' />
+            <input className='box' type='checkbox' onChange={handleSort} checked={sort} />
             <button type='submit'>Search!</button>
           </label>
         </form>
@@ -42,7 +49,11 @@ function App() {
       </header>
 
       <main>
-        <MoviesYN movies={movies} />
+        {
+          loading 
+            ? <p>Loading . . .</p> 
+            : <MoviesYN movies={movies} />
+        }
       </main>
     </>
   )

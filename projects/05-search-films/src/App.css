@@ -65,17 +65,27 @@
   margin-top: 20px;
 }
 
-input {
+.textfield {
   margin-right: 10px;
   width: 250px;
   height: 32px;
   border-radius: 10px;
 }
 
-label p {
+.moviename {
   padding-right: 10000px;
   margin: 0;
   padding: 0;
   font-size: 20px;
   color: rgb(60, 60, 60)
+}
+
+.box {
+  margin-right: 15px;
+  padding: 0;
+}
+
+button, label {
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
