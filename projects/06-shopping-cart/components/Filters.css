@@ -10,3 +10,14 @@
     display: flex;
     gap: 1rem;
   }
+
+  select {
+    height: 30px;
+    width: 160px;
+  }
+
+  input {
+    vertical-align: center;
+    height: 20px;
+    width: 50px;
+  }
